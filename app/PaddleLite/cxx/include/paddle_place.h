@@ -57,7 +57,8 @@ enum class TargetType : int {
   kMLU = 11,
   kRKNPU = 12,
   kAPU = 13,
-  NUM = 14,  // number of fields.
+  kHuaweiAscendNPU = 14,
+  NUM = 15,  // number of fields.
 };
 enum class PrecisionType : int {
   kUnk = 0,
@@ -69,7 +70,8 @@ enum class PrecisionType : int {
   kBool = 6,
   kInt64 = 7,
   kInt16 = 8,
-  NUM = 9,  // number of fields.
+  kUInt8 = 9,
+  NUM = 10,  // number of fields.
 };
 enum class DataLayoutType : int {
   kUnk = 0,
@@ -106,13 +108,18 @@ enum class ActivationType : int {
   kAbs = 9,
   kHardSwish = 10,
   kReciprocal = 11,
-  NUM = 12,
+  kThresholdedRelu = 12,
+  kElu = 13,
+  kHardSigmoid = 14,
+  NUM = 15,
 };
 
 static size_t PrecisionTypeLength(PrecisionType type) {
   switch (type) {
     case PrecisionType::kFloat:
       return 4;
+    case PrecisionType::kUInt8:
+      return 1;
     case PrecisionType::kInt8:
       return 1;
     case PrecisionType::kInt32:
@@ -137,6 +144,7 @@ struct PrecisionTypeTrait {
 #define _ForEachPrecisionType(callback)                   \
   _ForEachPrecisionTypeHelper(callback, bool, kBool);     \
   _ForEachPrecisionTypeHelper(callback, float, kFloat);   \
+  _ForEachPrecisionTypeHelper(callback, uint8_t, kUInt8); \
   _ForEachPrecisionTypeHelper(callback, int8_t, kInt8);   \
   _ForEachPrecisionTypeHelper(callback, int16_t, kInt16); \
   _ForEachPrecisionTypeHelper(callback, int, kInt32);     \
